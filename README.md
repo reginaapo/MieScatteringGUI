@@ -1,1 +1,1 @@
-# MieScattering
+# Mie Scattering
