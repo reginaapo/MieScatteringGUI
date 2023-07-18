@@ -1,13 +1,4 @@
 # Calling Necessary packages
-import importlib.resources
-import numpy as np
-import matplotlib.pyplot as plt
-import miepython
-from scipy.integrate import quad
-from scipy.optimize import curve_fit
-from numpy import sin
-from numpy import cos
-from numpy import exp
 import random
 import tkinter
 from tkinter import *
