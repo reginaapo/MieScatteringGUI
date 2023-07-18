@@ -27,90 +27,96 @@ from scipy.optimize import curve_fit
 from numpy import sin
 from numpy import cos
 from numpy import exp
+import os
+import os.path
 
 #Importing all relevant Refractive index data
-nnamesio2 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexSiO2.csv"
+current_dir = os.path.dirname(__file__)
+
+# Construct the relative file path
+file_path = os.path.join(current_dir, "RI")
+nnamesio2 = file_path+r"\refractiveIndexSiO2.csv"
 sio2 = np.genfromtxt(nnamesio2, delimiter=',', skip_header=1)
 sio2_lam = sio2[:, 0]
 sio2_mre = sio2[:, 1]
 
-nnameal2o3 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexAl2O3.csv"
+nnameal2o3 = file_path+r"\refractiveIndexAl2O3.csv"
 al2o3 = np.genfromtxt(nnameal2o3, delimiter=',', skip_header=1)
 al2o3_lam = al2o3[:, 0]
 al2o3_mre = al2o3[:, 1]
 
-nnamefeo = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexFeO.csv"
+nnamefeo = file_path+r"\refractiveIndexFeO.csv"
 feo = np.genfromtxt(nnamefeo, delimiter=',', skip_header=1)
 feo_lam = feo[:, 0]
 feo_lam = feo_lam[:int(len(feo_lam) / 2)]
 feo_mre = feo[:, 1]
 feo_mre = feo_mre[:int(len(feo_mre) / 2)]
 
-nnamemgo = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexMgO.csv"
+nnamemgo = file_path+r"\refractiveIndexMgO.csv"
 mgo = np.genfromtxt(nnamemgo, delimiter=',', skip_header=1)
 mgo_lam = mgo[:, 0]
 mgo_mre = mgo[:, 1]
 
-nnamemno2 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexMnO2.csv"
+nnamemno2 = file_path+r"\refractiveIndexMnO2.csv"
 mno2 = np.genfromtxt(nnamemno2, delimiter=',', skip_header=1)
 mno2_lam = mno2[:, 0]
 mno2_mre = mno2[:, 1]
 
-nnametio2 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexTiO2.csv"
+nnametio2 = file_path+r"\refractiveIndexTiO2.csv"
 tio2 = np.genfromtxt(nnametio2, delimiter=',', skip_header=1)
 tio2_lam = tio2[:, 0]
 tio2_mre = tio2[:, 1]
 
-nnamecao = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT 2023\refractiveIndexCaO.csv"
+nnamecao = file_path+r"\refractiveIndexCaO.csv"
 cao = np.genfromtxt(nnamecao, delimiter=',', skip_header=1)
 cao_lam = cao[:, 0]
 cao_mre = cao[:, 1]
 
-nname95 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid95.txt"
+nname95 = file_path+r"\refractiveIndexSulfuricAcid95.txt"
 h2so495 = np.genfromtxt(nname95, delimiter='\t', skip_header=1)
 h2so4_lam95 = h2so495[:, 0]
 h2so4_mre95 = h2so495[:, 1]
 
-nname25 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid25.txt"
+nname25 = file_path+r"\refractiveIndexSulfuricAcid25.txt"
 h2so425 = np.genfromtxt(nname25, delimiter='\t', skip_header=1)
 h2so4_lam25 = h2so425[:,0]
 h2so4_mre25 = h2so425[:,1]
 
-nname38 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid38.txt"
+nname38 = file_path+r"\refractiveIndexSulfuricAcid38.txt"
 h2so438 = np.genfromtxt(nname38, delimiter='\t', skip_header=1)
 h2so4_lam38 = h2so438[:, 0]
 h2so4_mre38 = h2so438[:, 1]
 
-nname5 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid50.txt"
+nname5 = file_path+r"\refractiveIndexSulfuricAcid50.txt"
 h2so45 = np.genfromtxt(nname5, delimiter='\t', skip_header=1)
 h2so4_lam5 = h2so45[:,0]
 h2so4_mre50 = h2so45[:,1]
 
 
-nname6 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid61.txt"
+nname6 = file_path+r"\refractiveIndexSulfuricAcid61.txt"
 h2so46 = np.genfromtxt(nname6, delimiter='\t', skip_header=1)
 h2so4_lam6 = h2so46[:,0]
 h2so4_mre60 = h2so46[:,1]
 
 
-nname75 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid75.txt"
+nname75 = file_path+r"\refractiveIndexSulfuricAcid75.txt"
 h2so475 = np.genfromtxt(nname75, delimiter='\t', skip_header=1)
 h2so4_lam75 = h2so475[:,0]
 h2so4_mre75 = h2so475[:,1]
 
 
-nname84 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid84.txt"
+nname84 = file_path+r"\refractiveIndexSulfuricAcid84.txt"
 h2so484 = np.genfromtxt(nname84, delimiter='\t', skip_header=1)
 h2so4_lam84= h2so484[:,0]
 h2so4_mre84 = h2so484[:,1]
 
 
-nname9 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid90.txt"
+nname9 = file_path+r"\refractiveIndexSulfuricAcid90.txt"
 h2so49 = np.genfromtxt(nname9, delimiter='\t', skip_header=1)
 h2so4_lam9 = h2so49[:,0]
 h2so4_mre90 = h2so49[:,1]
 
-nname0 = r"C:\Users\regin\OneDrive - Massachusetts Institute of Technology\Documents\MIT2022\MorningStar\refractiveIndexSulfuricAcid00.txt"
+nname0 = file_path+ r"\refractiveIndexSulfuricAcid00.txt"
 h2o = np.genfromtxt(nname0, delimiter='\t', skip_header=1)
 h2o_lam = h2o[:,0]
 h2o_mre = h2o[:,1]
