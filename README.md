@@ -1,5 +1,6 @@
 # Mie Scattering
 ## By: M. Regina A. Moreno
+## Licensed by MIT
 
 This is a GUI to facilitate Mie Scattering for spherical particles.
 
