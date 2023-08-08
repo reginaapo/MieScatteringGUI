@@ -436,8 +436,6 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
 
          mre = m_aerosol0
          geometric_cross_section = np.pi * (a / 2) ** 2
-         print(mre)
-         print(m_sphere)
          m = m_sphere / mre
          if clickedM.get() == 'No Mineral':
             m = mre
@@ -492,8 +490,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
 
          # plt.show()
          def rawI(x):
-            #tt = np.arange(-181, 181, 1)
-            tt = np.arange(eVec0[0], eVec0[1]+0.1, .1)
+            tt = np.arange(-181, 181, 0.1)
             [k] = np.where(tt == x)
             if len(k) == 0:
                newTheta = find_nearest(tt, x)
@@ -502,8 +499,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
             return y
 
          def rawQ(x):
-            #tt = np.arange(-181, 181, 1)
-            tt = np.arange(eVec0[0], eVec0[1]+0.1, .1)
+            tt = np.arange(-181, 181, 0.1)
             [k] = np.where(tt == x)
             if len(k) == 0:
                newTheta = find_nearest(tt, x)
@@ -516,11 +512,9 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
          tt = np.arange(eVec0[0], eVec0[1]+0.1, 0.1)
          for f in tt:
             fl = eVec0[3]*1000  # Focal Length (200000 microns)
-            print(fl)
             midTheta = (max(tt) + min(tt)) / 2  # Mid Point Theta (rad)
             deltaTheta = np.abs(f - midTheta) * np.pi / 180  # Maximum delta (rad)
             windowR = eVec0[2]*1000   # Window radius
-            print(windowR)
             h = fl * np.tan(deltaTheta)
             d = np.sqrt((windowR ** 2) - (h ** 2))
             weight = 0.2 * np.arctan(d / fl) * np.pi / 180
@@ -620,7 +614,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
             aQ.append(Q)
 
             def rawI(x):
-               tt = np.arange(eVec0[0], eVec0[1]+1, 1)
+               tt = np.arange(-180, 180, 0.1)
                [k] = np.where(tt == x)
                if len(k) == 0:
                   newTheta = find_nearest(tt, x)
@@ -631,7 +625,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
             #resI = []
 
             def rawQ(x):
-               tt = np.arange(eVec0[0], eVec0[1]+0.1, .1)
+               tt = np.arange(-180, 180, 0.1)
                [k] = np.where(tt == x)
                if len(k) == 0:
                   newTheta = find_nearest(tt, x)
@@ -1011,7 +1005,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
             allS.append(sigma)
 
          def rawI(x):
-            tt = np.arange(eVec0[0], eVec0[1]+0.1, .1)
+            tt = np.arange(-180, 180, 0.1)
             [k] = np.where(tt == x)
             if len(k) == 0:
                newTheta = find_nearest(tt, x)
@@ -1020,7 +1014,7 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
             return y
 
          def rawQ(x):
-            tt = np.arange(eVec0[0], eVec0[1]+0.1, .1)
+            tt = np.arange(-180, 180, 0.1)
             [k] = np.where(tt == x)
             if len(k) == 0:
                newTheta = find_nearest(tt, x)
