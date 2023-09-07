@@ -156,20 +156,83 @@ L1S.pack( )
 def show():
    label.config(text=clickedS.get())
 # Dropdown menu options
-minerals = ["H2O", "H2SO4-25", "H2SO4-38", "H2SO4-50","H2SO4-75", "H2SO4-84", "H2SO4-95", "SiO2", "TiO2", "Al2O3", "FeO", "MnO", "CaO", "K2O", "MgO", "Ph3", "No Mineral"]
+minerals = ["H2O", "H2SO4-25", "H2SO4-38", "H2SO4-50","H2SO4-75", "H2SO4-84", "H2SO4-95", "SiO2", "TiO2", "Al2O3", "FeO", "MnO", "CaO", "K2O", "MgO", "Ph3", "No Mineral","Type in"]
 mMineral = [h2o_mre, h2so4_mre25, h2so4_mre38, h2so4_mre50, h2so4_mre75, h2so4_mre84, h2so4_mre95, sio2_mre, tio2_mre, al2o3_mre, feo_mre, mno2_mre, cao_mre, 0, mgo_mre, [2.144], 0]
 lamMineral = [h2o_lam/1000, h2so4_lam25/1000, h2so4_lam38/1000, h2so4_lam5/1000, h2so4_lam75/1000, h2so4_lam84/1000, h2so4_lam95/1000, sio2_lam, tio2_lam, al2o3_lam, feo_lam, mno2_lam/1000, cao_lam/1000, 0, mgo_lam, h2so4_lam95/1000, 0]
 # datatype of menu text
 clickedS = StringVar()
 # initial menu text
 clickedS.set("H2SO4-95")
-# Create Dropdown menu
-dropS = OptionMenu(frame2, clickedS, *minerals)
+# Create a Type in Option
+LT = Label(frame2, text="Type in Aerosol Refractive Index: ")
+riA=DoubleVar()
+#ET = Scale(frame2, label="Type in Aerosol Refractive Index:", variable=riA, orient=HORIZONTAL, from_=1, to=10, resolution=0.1)
+ET = Spinbox(frame2, from_=1, to=10, increment=0.01, textvariable=riA)
+sAerosol = DoubleVar()
+
+def selT(clickedS):
+   global km, kAerosol
+   if (str(clickedS)=="Type in"):
+      LT.pack()
+      ET.pack()
+      Tbutton.pack(anchor=CENTER)
+   else:
+      Tbutton.pack_forget()
+      LT.pack_forget()
+      ET.pack_forget()
+      km = minerals.index(clickedS)
+      kAerosol = mMineral[km]
+# Define Function
+def msel():
+   global kAerosol, km
+   if (str(clickedS.get())=="Type in"):
+      kAerosol = riA.get()
+   else:
+      km = minerals.index(clickedS.get())
+      kAerosol = mMineral[km]
+dropS = OptionMenu(frame2, clickedS, *minerals,command=selT)
 dropS.pack()
 
-kmS = minerals.index(clickedS.get())
-kAerosol = mMineral[kmS]
-sAerosol = DoubleVar()
+# Create a Type in Option
+LTM = Label(frame2, text="Type in Mineral Refractive Index: ")
+riM=DoubleVar()
+ETM = Spinbox(frame2, from_=1, to=10, increment=0.01, textvariable=riM)
+#ETM = Scale(frame2, label="Type in Mineral Refractive Index:", variable=riM, orient=HORIZONTAL, from_=1, to=10, resolution=0.1)
+def selTR(clickedM):
+   global kmS, kMineral
+   if (str(clickedM)=="Type in"):
+      LTM.pack()
+      ETM.pack()
+      TRbutton.pack(anchor=CENTER)
+   else:
+      TRbutton.pack_forget()
+      LTM.pack_forget()
+      ETM.pack_forget()
+      if (str(clickedM) == "No Mineral"):
+         kmS = minerals.index(clickedS.get())
+         kMineral = mMineral[kmS]
+      else:
+         kmS = minerals.index(clickedM)
+         kMineral = mMineral[kmS]
+def mRsel():
+   global kMineral, kmS
+   if str(clickedM.get()) == 'No Mineral':
+      LTM.pack_forget()
+      ETM.pack_forget()
+      TRbutton.pack_forget()
+      if (str(clickedS.get()) == "Type in"):
+         kMineral = riA.get()
+      else:
+         kmS = minerals.index(clickedS.get())
+         kMineral = mMineral[kmS]
+   elif str(clickedM.get())=="Type in":
+      kMineral = riM.get()
+   else:
+      kmS = minerals.index(clickedM.get())
+      kMineral = mMineral[kmS]
+
+Tbutton = Button(frame2, text="Apply", command=msel)
+TRbutton = Button(frame2, text="Apply", command=mRsel)
 
 L1 = Label(frame2, text="Select a mineral to Simulate: ")
 L1.pack( )
@@ -181,13 +244,10 @@ clickedM = StringVar()
 # initial menu text
 clickedM.set("No Mineral")
 # Create Dropdown menu
-drop = OptionMenu(frame2, clickedM, *minerals)
+drop = OptionMenu(frame2, clickedM, *minerals, command=selTR)
 drop.pack()
-if clickedM.get() == 'No Mineral':
-   km = minerals.index(clickedS.get())
-else:
-   km = minerals.index(clickedM.get())
-kMineral = mMineral[km]
+
+kMineral= DoubleVar()
 sMineral = DoubleVar()
 aS = DoubleVar()
 sWavelen = DoubleVar()
@@ -223,6 +283,7 @@ def Rsel():
 
 button = Button(frame2, text="Apply", command=sel)
 Rbutton = Button(frame2, text="Apply", command=Rsel)
+
 def selA(clickedA):
    if (str(clickedA)=="Value"):
       Rbutton.pack_forget()
@@ -303,16 +364,30 @@ E32 = Spinbox(frame1, from_=400, to=600)
 
 def wsel():
    global sWavelen, sMineral, sAerosol
-   newlambda = find_nearest(lamMineral[km], (wvar.get() / 1000))
-   sWavelen = newlambda
-   newlambdaA = find_nearest(lamMineral[kmS], (wvar.get() / 1000))
-   sAerosol = newlambdaA
-   [j] = np.where(lamMineral[km] == newlambda)
-   [i] = np.where(lamMineral[kmS] == newlambdaA)
-   [sMineral] = kMineral[j]
-   [sAerosol] = kAerosol[i]
+   if (str(clickedS.get())=="Type in" ):
+      sAerosol = kAerosol
+      sWavelen = (wvar.get() / 1000)
+   else:
+      newlambda = find_nearest(lamMineral[km], (wvar.get() / 1000))
+      sWavelen = newlambda
+      [j] = np.where(lamMineral[km] == newlambda)
+      [sAerosol] = kAerosol[j]
+   if (str(clickedM.get()) == "Type in"):
+      sMineral = kMineral
+   else:
+      if str(clickedM.get()) == 'No Mineral':
+         sMineral=kAerosol
+      else:
+         newlambdaA = find_nearest(lamMineral[kmS], (wvar.get() / 1000))
+         [i] = np.where(lamMineral[kmS] == newlambdaA)
+         [sMineral] = kMineral[i]
 def wRsel():
    global sWavelen, sMineral, sAerosol
+   # We cannot select a refractive index for multiple wavelengths
+   LTM.pack_forget()
+   ETM.pack_forget()
+   LT.pack_forget()
+   ET.pack_forget()
    wvarMin = float(E31.get())
    wvarMax = float(E32.get())
    i = wvarMin / 1000
@@ -383,18 +458,31 @@ def allG(m_sphere0, a0, lambda0, m_aerosol0, gVec0, eVec0):
    cm = plt.get_cmap('RdYlBu')
    markers=["d", "v", "s", "*", "^", "o", "<", ">", "x", "+","."]
    canvas = FigureCanvasTkAgg(figs, newWindow)
+   print('--')
    if isfloat(a0) == True:
       print('Selected Particle Size: %s' % a0)
       if isfloat(lambda0) == True:
          print('Selected Wavelength: %s' % lambda0)
+         print('Refractive Index Aerosol: %s' % m_aerosol0)
+         if clickedM.get() != 'No Mineral':
+            print('Refractive Index Mineral: %s' % m_sphere0)
       elif isfloat(lambda0) == False:
          print('Selected Wavelength: (%s,%s)' % (min(lambda0), max(lambda0)))
+         print('Refractive Index Aerosol: (%s,%s)' % (min(m_aerosol0), max(m_aerosol0)))
+         if clickedM.get() != 'No Mineral':
+            print('Refractive Index Mineral: (%s,%s)' % (min(m_sphere0), max(m_sphere0)))
    elif isfloat(a0) == False:
       print('Selected Particle Size: (%s,%.f)' % (min(a0), max(a0)))
       if isfloat(lambda0) == True:
          print('Selected Wavelength: %s' % lambda0)
+         print('Refractive Index Aerosol: %s' % m_aerosol0)
+         if clickedM.get() != 'No Mineral':
+            print('Refractive Index Mineral: %s' % m_sphere0)
       elif isfloat(lambda0) == False:
          print('Selected Wavelength: (%s,%s)' % (min(lambda0), max(lambda0)))
+         print('Refractive Index Aerosol: (%s,%s)' % (min(m_aerosol0), max(m_aerosol0)))
+         if clickedM.get() != 'No Mineral':
+            print('Refractive Index Mineral: (%s,%s)' % (min(m_sphere0), max(m_sphere0)))
    # theta = np.linspace(-180,180,1800)
    theta = np.arange(-181, 181, 0.1)
    #theta = np.arange(eVec0[0], eVec0[1]+0.1, 0.1)
@@ -1197,10 +1285,18 @@ def saveCallBack():
 #Runing the Simulation
 def goCallBack():
    global gVector, subplots
-   sVector = [sMineral, aS, sWavelen,sAerosol]
-   #print(sVector)
+   # Making sure everything runs
+   if (str(clickedW.get())=="Value"):
+      wsel()
+   elif (str(clickedW.get())=="Range"):
+      wRsel()
+   if (str(clickedA.get())=="Value"):
+      sel()
+   elif (str(clickedA.get())=="Range"):
+      Rsel()
+   sVector = [sMineral, aS, sWavelen, sAerosol]
    gVector = [CheckVar1.get(), CheckVar2.get(), CheckVar3.get(), CheckVar4.get(), CheckVar5.get(), CheckVar6.get(), CheckVar7.get(), CheckVar8.get(), CheckVar9.get()]
-   eVector=[float(anMinS.get()),float(anMaxS.get()),float(winRS.get()),float(focDS.get())]
+   eVector=[float(anMinS.get()), float(anMaxS.get()),float(winRS.get()),float(focDS.get())]
    #print(eVector)
    # newWindow = Toplevel(root)
    # newWindow.title("Mie Scattering Simulation Results")
